@@ -1,3 +1,4 @@
+//set 3
 import java.util.Scanner;
 
 public class AreaCalculator {

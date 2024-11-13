@@ -1,3 +1,4 @@
+//set 5
 import java.util.Scanner;
 // Superclass
 class Company {

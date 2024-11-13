@@ -1,101 +1,86 @@
 //set 1
-import java.util.Scanner;
-class Account {
-    protected String customerName;
-    protected String accountNumber;
-    protected double balance;
-    protected String accountType;
-
-    public Account(String customerName, String accountNumber, String accountType) {
-        this.customerName = customerName;
-        this.accountNumber = accountNumber;
-        this.accountType = accountType;
-        this.balance = 0.0; 
+import java.util.*;
+abstract class Account{
+    String name,actp;
+    int acno;
+    double balance;
+    abstract public void getValues();
+    abstract public void deposit(int amt);
+    abstract public void withdraw(int amt);
+    abstract public void display();
+}
+class CurrAcct extends Account{
+    Scanner in=new Scanner(System.in);
+    public void getValues(){
+        System.out.println("Enter name,account number and balance");
+        name=in.nextLine();
+        actp="Current";
+        acno=in.nextInt();
+        balance=in.nextDouble();
+        in.nextLine();
     }
-
-    public void deposit(double amount) {
-        if (amount > 0) {
-            balance += amount;
-            System.out.println("Deposit of $" + amount + " successful. New balance: $" + balance);
-        } else {
-            System.out.println("Invalid deposit amount.");
-        }
+    public void deposit(int amt){
+        balance+=amt;
+    }    
+    public void withdraw(int amt){
+        balance-=amt;
     }
-
-    public void withdraw(double amount) {
-        if (amount > 0 && balance >= amount) {
-            balance -= amount;
-            System.out.println("Withdrawal of $" + amount + " successful. Remaining balance: $" + balance);
-        } else {
-            System.out.println("Insufficient funds or invalid withdrawal amount. Current balance: $" + balance);
-        }
-    }
-
-    public void displayAccountDetails() {
-        System.out.println("Customer Name: " + customerName);
-        System.out.println("Account Number: " + accountNumber);
-        System.out.println("Account Type: " + accountType);
-        System.out.println("Current Balance: $" + balance);
+    public void display(){
+        System.out.println("\n\nName : "+name+"\nAccount Type : "+actp+"\nAccount no : "+acno+"\nBalance : "+balance);
     }
 }
-
-class CurrAcct extends Account {
-    public CurrAcct(String customerName, String accountNumber) {
-        super(customerName, accountNumber, "Current Account");
+class SavAcct extends Account{
+    Scanner in=new Scanner(System.in);
+    public void getValues(){
+        System.out.println("Enter name,account number and balance");
+        name=in.nextLine();
+        actp="Savings";
+        acno=in.nextInt();
+        balance=in.nextDouble();
+        in.nextLine();
     }
-}
-
-class SavAcct extends Account {
-    public SavAcct(String customerName, String accountNumber) {
-        super(customerName, accountNumber, "Savings Account");
+    public void deposit(int amt){
+        balance+=amt;
+    }    
+    public void withdraw(int amt){
+        balance-=amt;
     }
-}
-
-public class Bank {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter customer name for current account: ");
-        String currentName = scanner.nextLine();
-        System.out.print("Enter account number for current account: ");
-        String currentAccNum = scanner.nextLine();
-        CurrAcct currentAccount = new CurrAcct(currentName, currentAccNum);
-        System.out.print("Enter customer name for savings account: ");
-        String savingsName = scanner.nextLine();
-        System.out.print("Enter account number for savings account: ");
-        String savingsAccNum = scanner.nextLine();
-        SavAcct savingsAccount = new SavAcct(savingsName, savingsAccNum);
-        System.out.println("\nChoose operation for Current Account:");
-        System.out.println("1. Deposit");
-        System.out.println("2. Withdraw");
-        System.out.print("Enter choice (1/2): ");
-        int choice = scanner.nextInt();
-        System.out.print("Enter amount: ");
-        double amount = scanner.nextDouble();
-
-        if (choice == 1) {
-            currentAccount.deposit(amount);
-        } else if (choice == 2) {
-            currentAccount.withdraw(amount);
-        } else {
-            System.out.println("Invalid choice.");
+    public void display(){
+        System.out.println("\n\nName : "+name+"Account Type : "+actp+"Account no : "+acno+"Balance : "+balance);
+    }  }
+public class Bank{
+    public static void main(String[] args){
+        Scanner in=new Scanner(System.in);
+        Account act=null;
+        int amt=0;
+        System.out.println("Type of account : \n1.Savings\n2.Current\nEnter your choice : ");
+        int ch=in.nextInt();
+        in.nextLine();
+        if(ch==1){
+            act=new SavAcct();
         }
-        System.out.println("\nChoose operation for Savings Account:");
-        System.out.println("1. Deposit");
-        System.out.println("2. Withdraw");
-        System.out.print("Enter choice (1/2): ");
-        choice = scanner.nextInt();
-        System.out.print("Enter amount: ");
-        amount = scanner.nextDouble();
-        if (choice == 1) {
-            savingsAccount.deposit(amount);
-        } else if (choice == 2) {
-            savingsAccount.withdraw(amount);
-        } else {
-            System.out.println("Invalid choice.");
+        else if(ch==2){
+            act=new CurrAcct();
         }
-        System.out.println("\nCurrent Account Details:");
-        currentAccount.displayAccountDetails();
-        System.out.println("\nSavings Account Details:");
-        savingsAccount.displayAccountDetails();
-    }
-}
+        else{
+            return;
+        }
+        act.getValues();
+        while(true){
+            System.out.println("1.deposit\n2.withdraw\n3.display\n4.Exit\nEnter your choice");
+            ch=in.nextInt();
+            switch(ch){
+                case 1: 
+                System.out.println("Enter amt :");
+                amt=in.nextInt();
+                act.deposit(amt); 
+                break;
+                case 2: 
+                System.out.println("Enter amt :");
+                amt=in.nextInt();
+                act.withdraw(amt); 
+                break;
+                case 3: act.display(); break;
+                case 4: return;
+
+            }        }    } }
